@@ -16,13 +16,13 @@ def main():
     time.sleep(1)
 
     intial_tag = driver.find_element_by_xpath("//div[@data-hook='content_row-1']")
-    intial_image.find_elements_by_xpath(".//*")[0].click()
+    intial_tag.find_elements_by_xpath(".//*")[0].click()
 
     time.sleep(3)
 
     print("Downloading and saving images...\n")
 
-    for _ in range(10):
+    for _ in range(1000):
 
         window_after = driver.window_handles[0]
         driver.switch_to.window(window_after)
