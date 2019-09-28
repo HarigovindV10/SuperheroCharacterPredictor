@@ -4,6 +4,7 @@ import sys
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
+import selenium
 
 def main():
 
@@ -11,36 +12,39 @@ def main():
 
     driver = webdriver.Chrome("/Users/harigovindvalsakumar/Downloads/chromedriver")
     driver.get('https://www.deviantart.com/search?q=dc')
+
     time.sleep(1)
 
-    print("Scrolling the webpage...\n")
+    intial_tag = driver.find_element_by_xpath("//div[@data-hook='content_row-1']")
+    intial_image.find_elements_by_xpath(".//*")[0].click()
 
-    elem = driver.find_element_by_tag_name("body")
+    time.sleep(3)
 
-    for _ in range(300):
-        elem.send_keys(Keys.PAGE_DOWN)
+    print("Downloading and saving images...\n")
+
+    for _ in range(10):
+
+        window_after = driver.window_handles[0]
+        driver.switch_to.window(window_after)
+
+        url = driver.find_element_by_xpath("/html/body/div/div[2]/div[1]/div[1]/div/div[2]/div/img").get_attribute("src")
+
+        file_name = driver.find_elements_by_xpath("/html/body/div/div[2]/div[3]/div/div[1]/div/div[1]/div/div[1]")
+
+        urllib.request.urlretrieve(url, "./Datasets/" + file_name[0].text + ".jpg")
+
+        next_arrow = driver.find_element_by_xpath("//div[@data-hook = 'arrowR']")
+
+        next_arrow.click()
+
         time.sleep(0.2)
 
-    div_elements = driver.find_elements_by_xpath("//div[contains(@role, 'img')]")
+    print("Download complete...\n")
 
-    imt = []
-    file_names = []
-
-    for i in div_elements:
-        imt.append(i.find_element_by_xpath("//img").get_attribute("src"))
-        file_names.append(i.find_element_by_xpath("//img").get_attribute("alt"))
-
-    print("Downloading files and saving them....\n")
-
-    for img_url,file_name in zip(imt,file_names):
-        url = img_url
-        urllib.request.urlretrieve(url, "./Datasets/" + file_name + ".jpg")
-
-    print("Dowload complete...\n")
-
-    print("Closing browser instance....\n")
+    print("Closing browser instance...\n")
 
     driver.quit()
 
 if __name__ == "__main__":
+
     main()
