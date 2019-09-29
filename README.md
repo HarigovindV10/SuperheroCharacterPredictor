@@ -1,2 +1,2 @@
-# superhero_character_predictor
+# SuperheroCharacterPredictor
 A Machine Learning Model to predict superheroes from their images
